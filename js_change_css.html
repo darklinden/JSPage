@@ -1,0 +1,537 @@
+<html>
+<head>
+	<script>
+
+function config_view(column_width, column_height, text_size_adjust, highlight_background, font_family, text_color, img_max_width, img_max_height)
+{
+    var element_list = document.getElementsByTagName('*');
+    for (var i = 0, max = element_list.length; i < max; i++)
+    {
+        var element = element_list[i];
+        //clear background & set highlight background
+        element.style.backgroundColor = 'transparent';
+
+        //set highlight background
+        if (element.tagName.toLowerCase() === 'highlight')
+        {
+            element.style.background = highlight_background;
+        }
+        else
+        {
+            element.style.background = 'transparent';
+        }
+
+        //set text word wrap
+        element.style.wordWrap = 'break-word';
+
+        //set html column
+        if (element.tagName.toLowerCase() === 'html')
+        {
+            element.style.padding = '0px';
+            element.style.height = column_height;
+            element.style.webkitColumnGap = '0px';
+            element.style.webkitColumnWidth = column_width;
+        }
+
+        //text size
+        if (element.tagName.toLowerCase() === 'body')
+        {
+            element.style.webkitTextSizeAdjust = text_size_adjust;
+        }
+
+        //text font & color
+        element.style.fontFamily = font_family;
+        element.style.color = text_color;
+
+        //image max size
+        if (element.tagName.toLowerCase() === 'img')
+        {
+            element.style.maxWidth = img_max_width;
+            element.style.maxHeight = img_max_height;
+        }
+    }
+    alert('config_view success');
+}
+
+function getStringAt(x, y) {
+
+    var range;
+    var textNode;
+    var offset;
+
+    // standard
+    if (document.caretPositionFromPoint) {
+        range = document.caretPositionFromPoint(x, y);
+        textNode = range.offsetNode;
+        offset = range.offset;
+    }
+    // WebKit
+    else if (document.caretRangeFromPoint) {
+        range = document.caretRangeFromPoint(x, y);
+        textNode = range.startContainer;
+        offset = range.startOffset;
+    }
+
+    // only split TEXT_NODEs
+    if (textNode.nodeType == 3) {
+        var replacement = textNode.splitText(offset);
+        var string = replacement.textContent;
+        if (string.length < 10)
+        {
+            return textNode.textContent;
+        }
+        else
+        {
+            return string;
+        }
+    }
+    else {
+        return '';
+    }
+}
+
+function insertBreakAtPoint(e) {
+
+    var range;
+    var textNode;
+    var offset;
+
+    // standard
+    if (document.caretPositionFromPoint) {
+        range = document.caretPositionFromPoint(e.pageX, e.pageY);
+        textNode = range.offsetNode;
+        offset = range.offset;
+    // WebKit
+    }
+    else if (document.caretRangeFromPoint) {
+        range = document.caretRangeFromPoint(e.pageX, e.pageY);
+        textNode = range.startContainer;
+        offset = range.startOffset;
+    }
+
+    // only split TEXT_NODEs
+    if (textNode.nodeType == 3) {
+        var replacement = textNode.splitText(offset);
+        var br = document.createElement('br');
+        textNode.parentNode.insertBefore(br, replacement);
+    }
+}
+
+function insertBreakAction() {
+    var paragraphs = document.getElementsByTagName("p");
+    for (i=0 ; i < paragraphs.length; i++) {
+        paragraphs[i].addEventListener("click", insertBreakAtPoint, false);
+    }
+}
+		</script>
+<title>test</title>
+</head>
+<body>
+	<button onclick="config_view('320px', '380px', '100%', 'yellow', '', 'red', '200px', '200px')">touch1</button>
+	<button onclick="alert(getStringAt(3, 10))">touch2</button>
+<p>/*</p>
+<p>Copyright(C)2009StigBrautaset.Allrightsreserved.</p>
+<p>Redistributionanduseinsourceandbinaryforms,withorwithout</p>
+<p>modification,arepermittedprovidedthatthefollowingconditionsaremet:</p>
+<p>*Redistributionsofsourcecodemustretaintheabovecopyrightnotice,this</p>
+<p>listofconditionsandthefollowingdisclaimer.</p>
+<p>*Redistributionsinbinaryformmustreproducetheabovecopyrightnotice,</p>
+<p>thislistofconditionsandthefollowingdisclaimerinthedocumentation</p>
+<p>and/orothermaterialsprovidedwiththedistribution.</p>
+<p>*Neitherthenameoftheauthornorthenamesofitscontributorsmaybeused</p>
+<p>toendorseorpromoteproductsderivedfromthissoftwarewithoutspecific</p>
+<p>priorwrittenpermission.</p>
+<p>THISSOFTWAREISPROVIDEDBYTHECOPYRIGHTHOLDERSANDCONTRIBUTORS"ASIS"</p>
+<p>ANDANYEXPRESSORIMPLIEDWARRANTIES,INCLUDING,BUTNOTLIMITEDTO,THE</p>
+<p>IMPLIEDWARRANTIESOFMERCHANTABILITYANDFITNESSFORAPARTICULARPURPOSEARE</p>
+<p>DISCLAIMED.INNOEVENTSHALLTHECOPYRIGHTOWNERORCONTRIBUTORSBELIABLE</p>
+<p>FORANYDIRECT,INDIRECT,INCIDENTAL,SPECIAL,EXEMPLARY,ORCONSEQUENTIAL</p>
+<p>DAMAGES(INCLUDING,BUTNOTLIMITEDTO,PROCUREMENTOFSUBSTITUTEGOODSOR</p>
+<p>SERVICES;LOSSOFUSE,DATA,ORPROFITS;ORBUSINESSINTERRUPTION)HOWEVER</p>
+<p>CAUSEDANDONANYTHEORYOFLIABILITY,WHETHERINCONTRACT,STRICTLIABILITY,</p>
+<p>ORTORT(INCLUDINGNEGLIGENCEOROTHERWISE)ARISINGINANYWAYOUTOFTHEUSE</p>
+<p>OFTHISSOFTWARE,EVENIFADVISEDOFTHEPOSSIBILITYOFSUCHDAMAGE.</p>
+<p>*/</p>
+<p>#import"SBJsonParser.h"</p>
+<p>@interfaceSBJsonParser()</p>
+<p>-(BOOL)scanValue:(NSObject**)o;</p>
+<p>-(BOOL)scanRestOfArray:(NSMutableArray**)o;</p>
+<p>-(BOOL)scanRestOfDictionary:(NSMutableDictionary**)o;</p>
+<p>-(BOOL)scanRestOfNull:(NSNull**)o;</p>
+<p>-(BOOL)scanRestOfFalse:(NSNumber**)o;</p>
+<p>-(BOOL)scanRestOfTrue:(NSNumber**)o;</p>
+<p>-(BOOL)scanRestOfString:(NSMutableString**)o;</p>
+<p>//Cannotmanagewithoutlookingatthefirstdigit</p>
+<p>-(BOOL)scanNumber:(NSNumber**)o;</p>
+<p>-(BOOL)scanHexQuad:(unichar*)x;</p>
+<p>-(BOOL)scanUnicodeChar:(unichar*)x;</p>
+<p>-(BOOL)scanIsAtEnd;</p>
+<p>@end</p>
+<p>#defineskipWhitespace(c)while(isspace(*c))c++</p>
+<p>#defineskipDigits(c)while(isdigit(*c))c++</p>
+<p>@implementationSBJsonParser</p>
+<p>staticcharctrl[0x22];</p>
+<p>+(void)initialize</p>
+<p>{</p>
+<p>ctrl[0]='\"';</p>
+<p>ctrl[1]='\\';</p>
+<p>for(inti=1;i&lt;0x20;i++)</p>
+<p>ctrl[i+1]=i;</p>
+<p>ctrl[0x21]=0;</p>
+<p>}</p>
+<p>/**</p>
+<p>@deprecatedThisexistsinordertoprovidefragmentsupportinolderAPIsinonemore</p>
+<p>version.</p>
+<p>Itshouldberemovedinthenextmajorversion.</p>
+<p>*/</p>
+<p>-(id)fragmentWithString:(id)repr{</p>
+<p>[selfclearErrorTrace];</p>
+<p>if(!repr){</p>
+<p>[selfaddErrorWithCode:EINPUTdescription:Inputwas'nil'"];</p>
+<p>returnnil;</p>
+<p>}</p>
+<p>depth=0;</p>
+<p>c=[reprUTF8String];</p>
+<p>ido;</p>
+<p>if(![selfscanValue:&amp;o]){</p>
+<p>returnnil;</p>
+<p>}</p>
+<p>//WefoundsomevalidJSON.Butdiditalsocontainsomethingelse?</p>
+<p>if(![selfscanIsAtEnd]){</p>
+<p>[selfaddErrorWithCode:ETRAILGARBAGEdescription:GarbageafterJSON"];</p>
+<p>returnnil;</p>
+<p>}</p>
+<p>NSAssert1(o,Shouldhaveavalidobjectfrom%,repr);</p>
+<p>returno;</p>
+<p>}</p>
+<p>-(id)objectWithString:(NSString*)repr{</p>
+<p>ido=[selffragmentWithString:repr];</p>
+<p>if(!o)</p>
+<p>returnnil;</p>
+<p>//Checkthattheobjectwe'vefoundisavalidJSONcontainer.</p>
+<p>if(![oisKindOfClass:[NSDictionaryclass]]&amp;&amp;![oisKindOfClass:[NSArrayclass]]){</p>
+<p>[selfaddErrorWithCode:EFRAGMENTdescription:Validfragment,butnotJSON"];</p>
+<p>returnnil;</p>
+<p>}</p>
+<p>returno;</p>
+<p>}</p>
+<p>/*</p>
+<p>Incontrasttothepublicmethods,itisanerrortoomittheerrorparameterhere.</p>
+<p>*/</p>
+<p>-(BOOL)scanValue:(NSObject**)o</p>
+<p>{</p>
+<p>skipWhitespace(c);</p>
+<p>switch(*c++){</p>
+<p>case'{':</p>
+<p>return[selfscanRestOfDictionary:(NSMutableDictionary**)o];</p>
+<p>break;</p>
+<p>case'[':</p>
+<p>return[selfscanRestOfArray:(NSMutableArray**)o];</p>
+<p>break;</p>
+<p>case'"':</p>
+<p>return[selfscanRestOfString:(NSMutableString**)o];</p>
+<p>break;</p>
+<p>case'f':</p>
+<p>return[selfscanRestOfFalse:(NSNumber**)o];</p>
+<p>break;</p>
+<p>case't':</p>
+<p>return[selfscanRestOfTrue:(NSNumber**)o];</p>
+<p>break;</p>
+<p>case'n':</p>
+<p>return[selfscanRestOfNull:(NSNull**)o];</p>
+<p>break;</p>
+<p>case'-':</p>
+<p>case'0'...'9':</p>
+<p>c--;//cannotverifynumbercorrectlywithoutthefirstcharacter</p>
+<p>return[selfscanNumber:(NSNumber**)o];</p>
+<p>break;</p>
+<p>case'+':</p>
+<p>[selfaddErrorWithCode:EPARSENUMdescription:Leading+disallowedin</p>
+<p>number"];</p>
+<p>returnNO;</p>
+<p>break;</p>
+<p>case0x0:</p>
+<p>[selfaddErrorWithCode:EEOFdescription:Unexpectedendofstring"];</p>
+<p>returnNO;</p>
+<p>break;</p>
+<p>default:</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:Unrecognisedleading</p>
+<p>character"];</p>
+<p>returnNO;</p>
+<p>break;</p>
+<p>}</p>
+<p>NSAssert(0,Shouldnevergethere");</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanRestOfTrue:(NSNumber**)o</p>
+<p>{</p>
+<p>if(!strncmp(c,"rue",3)){</p>
+<p>c+=3;</p>
+<p>*o=[NSNumbernumberWithBool:YES];</p>
+<p>returnYES;</p>
+<p>}</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:Expected'true'"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanRestOfFalse:(NSNumber**)o</p>
+<p>{</p>
+<p>if(!strncmp(c,"alse",4)){</p>
+<p>c+=4;</p>
+<p>*o=[NSNumbernumberWithBool:NO];</p>
+<p>returnYES;</p>
+<p>}</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:Expected'false'"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanRestOfNull:(NSNull**)o{</p>
+<p>if(!strncmp(c,"ull",3)){</p>
+<p>c+=3;</p>
+<p>*o=[NSNullnull];</p>
+<p>returnYES;</p>
+<p>}</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:Expected'null'"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanRestOfArray:(NSMutableArray**)o{</p>
+<p>if(maxDepth&amp;&amp;++depth&gt;maxDepth){</p>
+<p>[selfaddErrorWithCode:EDEPTHdescription:Nestedtoodeep"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>*o=[NSMutableArrayarrayWithCapacity:8];</p>
+<p>for(;*c;){</p>
+<p>idv;</p>
+<p>skipWhitespace(c);</p>
+<p>if(*c==']'&amp;&amp;c++){</p>
+<p>depth--;</p>
+<p>returnYES;</p>
+<p>}</p>
+<p>if(![selfscanValue:&amp;v]){</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:Expectedvaluewhileparsing</p>
+<p>array"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>[*oaddObject:v];</p>
+<p>skipWhitespace(c);</p>
+<p>if(*c==','&amp;&amp;c++){</p>
+<p>skipWhitespace(c);</p>
+<p>if(*c==']'){</p>
+<p>[selfaddErrorWithCode:ETRAILCOMMAdescription:Trailingcomma</p>
+<p>disallowedinarray"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>[selfaddErrorWithCode:EEOFdescription:Endofinputwhileparsingarray"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanRestOfDictionary:(NSMutableDictionary**)o</p>
+<p>{</p>
+<p>if(maxDepth&amp;&amp;++depth&gt;maxDepth){</p>
+<p>[selfaddErrorWithCode:EDEPTHdescription:Nestedtoodeep"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>*o=[NSMutableDictionarydictionaryWithCapacity:7];</p>
+<p>for(;*c;){</p>
+<p>idk,v;</p>
+<p>skipWhitespace(c);</p>
+<p>if(*c=='}'&amp;&amp;c++){</p>
+<p>depth--;</p>
+<p>returnYES;</p>
+<p>}</p>
+<p>if(!(*c=='\"'&amp;&amp;c++&amp;&amp;[selfscanRestOfString:&amp;k])){</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:Objectkeystringexpected"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>skipWhitespace(c);</p>
+<p>if(*c!=':'){</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:Expected':'separatingkeyand</p>
+<p>value"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>c++;</p>
+<p>if(![selfscanValue:&amp;v]){</p>
+<p>NSString*string=[NSStringstringWithFormat:Objectvalueexpectedfor</p>
+<p>key:%,k];</p>
+<p>[selfaddErrorWithCode:EPARSEdescription:string];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>[*osetObject:vforKey:k];</p>
+<p>skipWhitespace(c);</p>
+<p>if(*c==','&amp;&amp;c++){</p>
+<p>skipWhitespace(c);</p>
+<p>if(*c=='}'){</p>
+<p>[selfaddErrorWithCode:ETRAILCOMMAdescription:Trailingcomma</p>
+<p>disallowedinobject"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>[selfaddErrorWithCode:EEOFdescription:Endofinputwhileparsingobject"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanRestOfString:(NSMutableString**)o</p>
+<p>{</p>
+<p>*o=[NSMutableStringstringWithCapacity:16];</p>
+<p>do{</p>
+<p>//Firstseeifthere'saportionwecangrabinonego.</p>
+<p>//Doingthiscausedamassivespeeduponthelongstring.</p>
+<p>size_tlen=strcspn(c,ctrl);</p>
+<p>if(len){</p>
+<p>//checkfor</p>
+<p>idt=[[NSStringalloc]initWithBytesNoCopy:(char*)c</p>
+<p>length:len</p>
+<p>encoding:NSUTF8StringEncoding</p>
+<p>freeWhenDone:NO];</p>
+<p>if(t){</p>
+<p>[*oappendString:t];</p>
+<p>[trelease];</p>
+<p>c+=len;</p>
+<p>}</p>
+<p>}</p>
+<p>if(*c=='"'){</p>
+<p>c++;</p>
+<p>returnYES;</p>
+<p>}elseif(*c=='\\'){</p>
+<p>unicharuc=*++c;</p>
+<p>switch(uc){</p>
+<p>case'\\':</p>
+<p>case'/':</p>
+<p>case'"':</p>
+<p>break;</p>
+<p>case'b':uc='\b';break;</p>
+<p>case'n':uc='\n';break;</p>
+<p>case'r':uc='\r';break;</p>
+<p>case't':uc='\t';break;</p>
+<p>case'f':uc='\f';break;</p>
+<p>case'u':</p>
+<p>c++;</p>
+<p>if(![selfscanUnicodeChar:&amp;uc]){</p>
+<p>[selfaddErrorWithCode:EUNICODEdescription:Brokenunicode</p>
+<p>character"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>c--;//hack.</p>
+<p>break;</p>
+<p>default:</p>
+<p>[selfaddErrorWithCode:EESCAPEdescription:[NSString</p>
+<p>stringWithFormat:Illegalescapesequence'0x%x'",uc]];</p>
+<p>returnNO;</p>
+<p>break;</p>
+<p>}</p>
+<p>CFStringAppendCharacters((CFMutableStringRef)*o,&amp;uc,1);</p>
+<p>c++;</p>
+<p>}elseif(*c&lt;0x20){</p>
+<p>[selfaddErrorWithCode:ECTRLdescription:[NSString</p>
+<p>stringWithFormat:Unescapedcontrolcharacter'0x%x'",*c]];</p>
+<p>returnNO;</p>
+<p>}else{</p>
+<p>NSLog(shouldnotbeabletogethere");</p>
+<p>}</p>
+<p>}while(*c);</p>
+<p>[selfaddErrorWithCode:EEOFdescription:UnexpectedEOFwhileparsingstring"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanUnicodeChar:(unichar*)x</p>
+<p>{</p>
+<p>unicharhi,lo;</p>
+<p>if(![selfscanHexQuad:&amp;hi]){</p>
+<p>[selfaddErrorWithCode:EUNICODEdescription:Missinghexquad"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>if(hi&gt;=0xd800){//highsurrogatechar?</p>
+<p>if(hi&lt;0xdc00){//yes-expectalowchar</p>
+<p>if(!(*c=='\\'&amp;&amp;++c&amp;&amp;*c=='u'&amp;&amp;++c&amp;&amp;[selfscanHexQuad:&amp;lo])){</p>
+<p>[selfaddErrorWithCode:EUNICODEdescription:Missinglowcharacterin</p>
+<p>surrogatepair"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>if(lo&lt;0xdc00||lo&gt;=0xdfff){</p>
+<p>[selfaddErrorWithCode:EUNICODEdescription:Invalidlowsurrogate</p>
+<p>char"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>hi=(hi-0xd800)*0x400+(lo-0xdc00)+0x10000;</p>
+<p>}elseif(hi&lt;0xe000){</p>
+<p>[selfaddErrorWithCode:EUNICODEdescription:Invalidhighcharacterin</p>
+<p>surrogatepair"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>}</p>
+<p>*x=hi;</p>
+<p>returnYES;</p>
+<p>}</p>
+<p>-(BOOL)scanHexQuad:(unichar*)x</p>
+<p>{</p>
+<p>*x=0;</p>
+<p>for(inti=0;i&lt;4;i++){</p>
+<p>unicharuc=*c;</p>
+<p>c++;</p>
+<p>intd=(uc&gt;='0'&amp;&amp;uc&lt;='9')</p>
+<p>?uc-'0':(uc&gt;='a'&amp;&amp;uc&lt;='f')</p>
+<p>?(uc-'a'+10):(uc&gt;='A'&amp;&amp;uc&lt;='F')</p>
+<p>?(uc-'A'+10):-1;</p>
+<p>if(d==-1){</p>
+<p>[selfaddErrorWithCode:EUNICODEdescription:Missinghexdigitinquad"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>*x*=16;</p>
+<p>*x+=d;</p>
+<p>}</p>
+<p>returnYES;</p>
+<p>}</p>
+<p>-(BOOL)scanNumber:(NSNumber**)o</p>
+<p>{</p>
+<p>constchar*ns=c;</p>
+<p>//Thelogictotestforvalidityofthenumberformattingisrelicensed</p>
+<p>//fromJSON::XSwithpermissionfromitsauthorMarcLehmann.</p>
+<p>//(AvailableattheCPAN:http://search.cpan.org/dist/JSON-XS/.)</p>
+<p>if('-'==*c)</p>
+<p>c++;</p>
+<p>if('0'==*c&amp;&amp;c++){</p>
+<p>if(isdigit(*c)){</p>
+<p>[selfaddErrorWithCode:EPARSENUMdescription:Leading0disallowedin</p>
+<p>number"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>}elseif(!isdigit(*c)&amp;&amp;c!=ns){</p>
+<p>[selfaddErrorWithCode:EPARSENUMdescription:Nodigitsafterinitialminus"];</p>
+<p>returnNO;</p>
+<p>}else{</p>
+<p>skipDigits(c);</p>
+<p>}</p>
+<p>//Fractionalpart</p>
+<p>if('.'==*c&amp;&amp;c++){</p>
+<p>if(!isdigit(*c)){</p>
+<p>[selfaddErrorWithCode:EPARSENUMdescription:Nodigitsafterdecimal</p>
+<p>point"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>skipDigits(c);</p>
+<p>}</p>
+<p>//Exponentialpart</p>
+<p>if('e'==*c||'E'==*c){</p>
+<p>c++;</p>
+<p>if('-'==*c||'+'==*c)</p>
+<p>c++;</p>
+<p>if(!isdigit(*c)){</p>
+<p>[selfaddErrorWithCode:EPARSENUMdescription:Nodigitsafterexponent"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>skipDigits(c);</p>
+<p>}</p>
+<p>idstr=[[NSStringalloc]initWithBytesNoCopy:(char*)ns</p>
+<p>length:c-ns</p>
+<p>encoding:NSUTF8StringEncoding</p>
+<p>freeWhenDone:NO];</p>
+<p>[strautorelease];</p>
+<p>if(str&amp;&amp;(*o=[NSDecimalNumberdecimalNumberWithString:str]))</p>
+<p>returnYES;</p>
+<p>[selfaddErrorWithCode:EPARSENUMdescription:Failedcreatingdecimalinstance"];</p>
+<p>returnNO;</p>
+<p>}</p>
+<p>-(BOOL)scanIsAtEnd</p>
+<p>{</p>
+<p>skipWhitespace(c);</p>
+<p>return!*c;</p>
+<p>}</p>
+<p>@end</p></body></html>
